@@ -1,48 +1,21 @@
-1. -> cd ~/szgyak/feladat
-2. -> nano avg_line_length.sh //paste Feladat
-3. -> chmod +x avg_line_length.sh //perm
-4. -> printf "elso\nmasodik sor\nharmadik\n" > sorok.txt //check
-        ./avg_line_length.sh
-        ./avg_line_length.sh nincs_ilyen_fajl.txt
-        ./avg_line_length.sh sorok.txt
-
 Feladat:
 #!/bin/bash
-
 if [[ $# -lt 1 ]]; then
-    echo "Hiba: nem adtak meg állománynevet parancssori paraméterként." 1>&2
+    echo "Hiba: nem adtal meg parametert!" 1>&2
     exit 1
 fi
 
-file_name="$1"
-
-if [[ ! -e "$file_name" ]]; then
-    echo "Hiba: a '$file_name' állomány nem létezik." 1>&2
+if [[ ! -e "$1" ]]; then
+    echo "Hiba: a fajl nem letezik!" 1>&2
     exit 1
 fi
 
-if [[ ! -f "$file_name" || ! -r "$file_name" ]]; then
-    echo "Hiba: a '$file_name' nem olvasható szabályos fájl." 1>&2
-    exit 1
-fi
+sorok=$(wc -l < "$1")
+karakterek=$(wc -c < "$1")
 
-line_count=$(wc -l < "$file_name")
-
-if [[ "$line_count" -eq 0 ]]; then
-    echo "Az '$file_name' állomány üres (0 sor), átlagos sorhossz: 0"
-    exit 0
-fi
-
-total_chars=0
-while IFS= read -r line; do
-    total_chars=$((total_chars + ${#line}))
-done < "$file_name"
-
-avg_int=$((total_chars / line_count))
-
-if command -v bc >/dev/null 2>&1; then
-    avg_exact=$(echo "scale=2; $total_chars / $line_count" | bc)
-    echo "Átlagos sorhossz ('$file_name'): $avg_exact karakter (egészre kerekítve/osztva: $avg_int)"
+if [[ "$sorok" -eq 0 ]]; then
+    echo "Atlagos sorhossz: 0"
 else
-    echo "Átlagos sorhossz ('$file_name'): $avg_int karakter"
+    atlag=$((karakterek / sorok))
+    echo "Atlagos sorhossz: $atlag"
 fi
