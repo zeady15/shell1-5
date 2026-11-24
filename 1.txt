@@ -1,38 +1,14 @@
-1. -> mkdir -p ~/szgyak/feladat && cd ~/szgyak/feladat
-2. -> nano search_pattern.sh //paste Feladat
-3. -> chmod +x search_pattern.sh //perm
-4. -> printf "almafa\nkorte\nalma es alma\n" > teszt.txt //check
-    ./search_pattern.sh
-    ./search_pattern.sh teszt.txt
-    ./search_pattern.sh nincs_ilyen.txt "alma"
-    ./search_pattern.sh teszt.txt "alma"
-    ./search_pattern.sh teszt.txt "szilva"
-
 Feladat:
 #!/bin/bash
 
-if [[ $# -ne 2 ]]; then
-    echo "Hiba: pontosan 2 paraméter szükséges (fájlnév és minta), de $# darab érkezett." 1>&2
+if [[ $# -lt 2 ]]; then
+    echo "Hiba: keves parameter (fajlnev es minta kell)!" 1>&2
     exit 1
 fi
 
-file_name="$1"
-pattern="$2"
-
-if [[ ! -e "$file_name" ]]; then
-    echo "Hiba: a '$file_name' fájl nem létezik." 1>&2
-    exit 1
-fi
-
-if [[ ! -r "$file_name" || -d "$file_name" ]]; then
-    echo "Hiba: a '$file_name' nem olvasható szövegfájl (vagy mappa)." 1>&2
-    exit 1
-fi
-
-count=$(grep -E -c "$pattern" "$file_name")
-
-if [[ "$count" -gt 0 ]]; then
-    echo "A '$pattern' minta megtalálható a '$file_name' fájlban. Előfordulások száma: $count"
+if grep -q "$2" "$1"; then
+    db=$(grep -c "$2" "$1")
+    echo "Benne van, elofordulasok szama: $db"
 else
-    echo "A '$pattern' minta NEM található meg a '$file_name' fájlban."
+    echo "Nincs benne"
 fi
