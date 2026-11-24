@@ -1,35 +1,9 @@
-1. -> cd ~/szgyak/feladat
-2. -> nano check_entry.sh //paste Feladat
-3. -> chmod +x check_entry.sh //perm
-4. -> mkdir -p teszt_mappa //check
-        touch teszt_mappa/elem.txt
-        touch teszt_fajl.txt
-
-            ./check_entry.sh teszt_mappa
-            ./check_entry.sh teszt_fajl.txt
-            ./check_entry.sh
-            ```[cite: 4, 16, 17, 22, 23, 43]
-
 Feladat:
 #!/bin/bash
-
-if [[ $# -ne 1 ]]; then
-    echo "Hiba: pontosan 1 paramétert (állománynevet) kell megadni, de $# darab érkezett." 1>&2
-    exit 1
-fi
-
-entry="$1"
-
-if [[ ! -e "$entry" ]]; then
-    echo "Hiba: a '$entry' állomány nem létezik." 1>&2
-    exit 1
-fi
-
-if [[ -d "$entry" ]]; then
-    ls -la "$entry"
-elif [[ -f "$entry" ]]; then
+if [[ -d "$1" ]]; then
+    ls "$1"
+elif [[ -f "$1" ]]; then
     echo "!FILE!"
 else
-    echo "Hiba: a '$entry' nem jegyzék és nem is szabályos fájl." 1>&2
-    exit 1
+    echo "Nem letezik vagy mas tipusu allomany"
 fi
