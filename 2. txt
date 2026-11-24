@@ -1,0 +1,36 @@
+1. -> cd ~/szgyak/feladat
+2. -> nano delete_target.sh //paste Feladat
+3. -> chmod +x delete_target.sh //perm
+4. ->touch proba_fajl.txt //check
+    mkdir -p proba_mappa/almapapa
+    touch proba_mappa/almapapa/belso.txt
+
+        ./delete_target.sh
+        ./delete_target.sh proba_fajl.txt
+        ./delete_target.sh proba_mappa
+
+Feladat:
+#!/bin/bash
+
+if [[ $# -ne 1 ]]; then
+    echo "Hiba: pontosan 1 paramétert kell megadni (fájl vagy jegyzék neve), de $# darab érkezett." 1>&2
+    exit 1
+fi
+
+target="$1"
+
+if [[ ! -e "$target" ]]; then
+    echo "Hiba: a '$target' elem nem létezik." 1>&2
+    exit 1
+fi
+
+if [[ -d "$target" ]]; then
+    rm -r "$target"
+    echo "Jegyzéket törölt: '$target'"
+elif [[ -f "$target" ]]; then
+    rm "$target"
+    echo "Fájlt törölt: '$target'"
+else
+    echo "Hiba: a '$target' nem szabályos fájl és nem is jegyzék." 1>&2
+    exit 1
+fi
