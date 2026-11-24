@@ -1,37 +1,8 @@
-1. -> cd ~/szgyak/feladat
-2. -> nano logged_in_users.sh //paste Feladat
-3. -> chmod +x logged_in_users.sh //perm
-4. -> who
-      ./logged_in_users.sh //check
-
 Feladat:
 #!/bin/bash
 
-entries=$(who | awk '
-{
-    user = $1
-    origin = $(NF)
-    if (!(user in seen)) {
-        seen[user] = 1
-        lines[NR] = user " (" origin ")"
-        count++
-    }
-}
-END {
-    print count + 0
-    for (i = 1; i <= NR; i++) {
-        if (lines[i] != "") {
-            print lines[i]
-        }
-    }
-}')
+users=$(who | awk '{print $1 " (" $NF ")"}' | sort -u)
+db=$(echo "$users" | grep -c ".")
 
-user_count=$(echo "$entries" | head -n 1)
-user_list=$(echo "$entries" | tail -n +2)
-
-echo "Jelenleg bejelentkezett felhasználók száma: $user_count"
-
-if [[ "$user_count" -gt 0 ]]; then
-    echo "Bejelentkezve (felhasználó és honnan):"
-    echo "$user_list"
-fi
+echo "Bejelentkezve: $db fo"
+echo "$users"
